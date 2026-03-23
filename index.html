@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Художница | Портфолио</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Вертикальное меню справа -->
+     
+   <!-- Бургер-меню и триггерная зона -->
+<div class="menu-trigger-area"></div>
+<div class="burger-icon">☰</div>
+<nav class="menu">
+    <ul>
+        <li><a href="index.html" class="active">Главная</a></li>
+        <li><a href="about.html">Обо мне</a></li>
+        <li><a href="contact.html">Контакты</a></li>
+    </ul>
+</nav>
+<div class="menu-overlay"></div>
+
+    <main class="home">
+        <!-- Герой-секция с анимированным фоном и маленькими квадратами -->
+        <section class="hero">
+            <canvas id="hero-canvas"></canvas>
+    <div class="hero-content">
+        <h1 class="glitch" data-text="Привет, я 3D-художница">Привет, я 3D-художница</h1>
+        <p class="subtitle">Создаю миры, в которых хочется остаться</p>
+    </div>
+    <div class="floating-squares">
+        <!-- сюда JS будет генерировать 10 маленьких квадратов -->
+    </div>
+    <div class="scroll-indicator" id="scrollIndicator">
+        <div class="arrow-down"></div>
+    </div>
+</section>
+
+    <!-- Категории проектов -->
+<div class="categories-section">
+    <h2 class="section-title">Категории</h2>
+    <div class="categories-container">
+        
+        <!-- Категория: Объекты -->
+        <div class="category-card">
+            <h3 class="category-title">Объекты</h3>
+            <div class="category-projects-wrapper">
+                <div class="category-projects">
+                    <div class="category-project-item" data-project="bag">
+                        <img src="images/bag.png" alt="Bag">
+                        <span>Рюкзак</span>
+                    </div>
+                    <div class="category-project-item" data-project="compass">
+                        <img src="images/compass.png" alt="Compass">
+                        <span>Компас</span>
+                    </div>
+                    <div class="category-project-item" data-project="car">
+                        <img src="images/car.png" alt="Car">
+                        <span>Машина</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Категория: Окружение и Анимация -->
+        <div class="category-card">
+            <h3 class="category-title">Окружение и Анимация</h3>
+            <div class="category-projects-wrapper">
+                <div class="category-projects">
+                    <div class="category-project-item" data-project="scene">
+                        <img src="images/tower.png" alt="Scene">
+                        <span>Сцена (окружение)</span>
+                    </div>
+                    <div class="category-project-item" data-project="zombie">
+                        <img src="images/ded.png" alt="Zombie Animation">
+                        <span>Анимация зомби</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Категория: Персонажи (с добавленными Spider и Drag) -->
+        <div class="category-card">
+            <h3 class="category-title">Персонажи</h3>
+            <div class="category-projects-wrapper">
+                <div class="category-projects scrollable">
+                    <div class="category-project-item" data-project="elf">
+                        <img src="images/elf.png" alt="Elf">
+                        <span>Эльф</span>
+                    </div>
+                    <div class="category-project-item" data-project="mirel">
+                        <img src="images/mirel.png" alt="Mirel">
+                        <span>Mirel</span>
+                    </div>
+                    <div class="category-project-item" data-project="lex">
+                        <img src="images/lex.png" alt="Lex">
+                        <span>Lex</span>
+                    </div>
+                    <div class="category-project-item" data-project="spider">
+                        <img src="images/spider.png" alt="Spider">
+                        <span>Spider</span>
+                    </div>
+                    <div class="category-project-item" data-project="drag">
+                        <img src="images/drag.png" alt="Dragon">
+                        <span>Drag</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Индикатор скролла -->
+            <div class="scroll-indicator-category">
+                <span>→ скролл →</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Сетка избранных проектов (8 проектов) -->
+<section class="projects-grid">
+    <h2 class="section-title">Избранные проекты</h2>
+    <div class="grid-container">
+        <!-- Первый ряд - 4 проекта -->
+        <a href="projects/project1.html" class="project-item" data-project-id="1" style="transform: rotate(-2deg);">
+            <img src="images/bag.png" alt="Bag">
+            <span class="project-title">Bag</span>
+        </a>
+        <a href="projects/project2.html" class="project-item" data-project-id="2" style="transform: rotate(3deg) translateY(20px);">
+            <img src="images/compass.png" alt="Compass">
+            <span class="project-title">Compass</span>
+        </a>
+        <a href="projects/project3.html" class="project-item" data-project-id="3" style="transform: rotate(-1deg) scale(1.1);">
+            <img src="images/car.png" alt="Car">
+            <span class="project-title">Car</span>
+        </a>
+        <a href="projects/project4.html" class="project-item" data-project-id="4" style="transform: rotate(5deg) translateX(-20px);">
+            <img src="images/lex.png" alt="Lex">
+            <span class="project-title">Lex</span>
+        </a>
+        
+        <!-- Второй ряд - 4 проекта -->
+        <a href="projects/project5.html" class="project-item" data-project-id="5" style="transform: rotate(-4deg) translate(10px, -10px);">
+            <img src="images/spider.png" alt="Spider">
+            <span class="project-title">Spider</span>
+        </a>
+        <a href="projects/project6.html" class="project-item" data-project-id="6" style="transform: rotate(2deg) translateY(-5px);">
+            <img src="images/mirel.png" alt="Mirel">
+            <span class="project-title">Mirel</span>
+        </a>
+        <a href="projects/project7.html" class="project-item" data-project-id="7" style="transform: rotate(-3deg) translateX(15px);">
+            <img src="images/tower.png" alt="Scene">
+            <span class="project-title">Сцена</span>
+        </a>
+        <a href="projects/project8.html" class="project-item" data-project-id="8" style="transform: rotate(1deg) scale(0.95);">
+            <img src="images/ded.png" alt="Zombie Animation">
+            <span class="project-title">Анимация зомби</span>
+        </a>
+    </div>
+</section>
+    </main>
+
+    <!-- Кнопка "Наверх" -->
+    <button id="back-to-top" title="Наверх">↑</button>
+
+    <script src="js/main.js"></script>
+    
+</body>
+</html>

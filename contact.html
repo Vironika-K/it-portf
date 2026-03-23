@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакты | 3D Художница</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Бургер-меню и триггерная зона -->
+    <div class="menu-trigger-area"></div>
+    <div class="burger-icon">☰</div>
+    <nav class="menu">
+        <ul>
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="about.html">Обо мне</a></li>
+            <li><a href="contact.html" class="active">Контакты</a></li>
+        </ul>
+    </nav>
+    <div class="menu-overlay"></div>
+
+    <main class="contact">
+        <h1>Свяжитесь со мной</h1>
+        <div class="contact-grid">
+            <!-- Левая колонка: контакты + соцсети -->
+            <div class="contact-left">
+                <div class="contact-info">
+                    <h3>Контакты</h3>
+                    <p><strong>Email:</strong> <a href="mailto:qweJO16@gmail.com">qweJO16@gmail.com</a></p>
+                    <p><strong>Телефон:</strong> <a href="tel:+79650075925">+7 (965) 007-59-25</a></p>
+                </div>
+                
+                <!-- Социальные сети (внутри левой колонки) -->
+                <div class="social-section">
+                    <h3>Социальные сети</h3>
+                    <div class="social-links-row">
+                        <a href="#" target="_blank" class="social-link"> ArtStation</a>
+                        <a href="#" target="_blank" class="social-link"> VK</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Правая колонка: форма обратной связи -->
+            <div class="contact-form">
+                <h3>Напишите мне</h3>
+                <form id="feedback-form">
+                    <input type="text" placeholder="Ваше имя" required>
+                    <input type="email" placeholder="Email" required>
+                    <textarea placeholder="Сообщение" rows="5" required></textarea>
+                    <button type="submit">Отправить ➔</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <button id="back-to-top">↑</button>
+    <script src="js/main.js"></script>
+</body>
+</html>

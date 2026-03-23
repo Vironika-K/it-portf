@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bag | Проект</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <!-- Бургер-меню и триггерная зона -->
+    <div class="menu-trigger-area"></div>
+    <div class="burger-icon">☰</div>
+    <nav class="menu">
+        <ul>
+            <li><a href="../index.html">Главная</a></li>
+            <li><a href="../about.html">Обо мне</a></li>
+            <li><a href="../contact.html">Контакты</a></li>
+        </ul>
+    </nav>
+    <div class="menu-overlay"></div>
+
+    <main class="project-page">
+        <div class="project-header">
+            <div class="project-title-row">
+                <a href="../index.html#featured" class="back-arrow" title="Вернуться к избранным">←</a>
+                <h1>Bag</h1>
+            </div>
+        </div>
+
+        <div class="project-meta">
+            <span>Год: 2023</span>
+            <span>Тип: Личный проект</span>
+            <span>Категория: Объекты</span>
+        </div>
+
+        <!-- Главное изображение -->
+        <div class="main-image-container">
+            <img src="../images/bag.png" alt="Bag - Главный рендер" class="main-project-image">
+        </div>
+
+        <div class="project-description">
+            <p>Сумка в стиле киберпанк, созданная в Blender и Substance Painter. Детализированная модель с неоновыми элементами и потертостями. Текстуры рисовались вручную с акцентом на реалистичность материалов.</p>
+            <p>В работе использовались: Blender (моделинг), Substance Painter (текстуры), Photoshop (постобработка).</p>
+        </div>
+
+        <!-- Блок этапов работы с переключателем -->
+        <div class="workflow-section">
+            <h2 class="workflow-title">Этапы работы</h2>
+            
+            <!-- Большое изображение текущего этапа -->
+            <div class="workflow-stage-container">
+                <img id="workflow-stage-image" src="../images/bag-ref.png" alt="Этап работы" class="workflow-stage-image">
+                <p id="workflow-stage-label" class="workflow-stage-label">Референсы</p>
+            </div>
+            
+            <!-- Точки навигации по этапам -->
+            <div class="workflow-dots">
+                <div class="workflow-dot active" data-stage="0" data-image="../images/bag-ref.png" data-label="Референсы"></div>
+                <div class="workflow-dot" data-stage="1" data-image="../images/bag-draft.png" data-label="Драфт"></div>
+                <div class="workflow-dot" data-stage="2" data-image="../images/bag-hp.png" data-label="Хай поли"></div>
+                <div class="workflow-dot" data-stage="3" data-image="../images/bag-sc.png" data-label="Скульпт"></div>
+                <div class="workflow-dot" data-stage="4" data-image="../images/bag-lp.png" data-label="Лоу поли"></div>
+                <div class="workflow-dot" data-stage="5" data-image="../images/bag-uv.png" data-label="Развертка"></div>
+                <div class="workflow-dot" data-stage="6" data-image="../images/bag-tx.png" data-label="Текстурирование"></div>
+                <div class="workflow-dot" data-stage="7" data-image="../images/bag-rend1.png" data-label="Финальный рендер"></div>
+            </div>
+        </div>
+
+        <!-- Навигация по кругу -->
+        <div class="project-navigation">
+            <a href="project10.html" class="prev">← Предыдущий</a>
+            <a href="project2.html" class="next">Следующий →</a>
+        </div>
+    </main>
+
+    <button id="back-to-top">↑</button>
+    <script src="../js/main.js"></script>
+    
+    <!-- Скрипт для переключения этапов -->
+    <script>
+        // Переключение этапов работы
+        const dots = document.querySelectorAll('.workflow-dot');
+        const stageImage = document.getElementById('workflow-stage-image');
+        const stageLabel = document.getElementById('workflow-stage-label');
+        
+        dots.forEach(dot => {
+            dot.addEventListener('click', function() {
+                // Убираем активный класс у всех точек
+                dots.forEach(d => d.classList.remove('active'));
+                // Добавляем активный класс текущей точке
+                this.classList.add('active');
+                
+                // Получаем данные из атрибутов
+                const imageUrl = this.getAttribute('data-image');
+                const label = this.getAttribute('data-label');
+                
+                // Обновляем изображение и подпись
+                if (stageImage && imageUrl) {
+                    stageImage.style.opacity = '0';
+                    setTimeout(() => {
+                        stageImage.src = imageUrl;
+                        stageImage.style.opacity = '1';
+                    }, 200);
+                }
+                
+                if (stageLabel && label) {
+                    stageLabel.textContent = label;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
