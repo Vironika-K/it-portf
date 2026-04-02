@@ -101,20 +101,26 @@ a, button {
     transform: translateX(0);
 }
 
-/* ===== ГЛАВНАЯ СТРАНИЦА ===== */
 .home .hero {
     position: relative;
     height: 100vh;
     overflow: hidden;
-    background: radial-gradient(circle at 30% 50%, #2b1a4a, #0a0a0a);
-    animation: gradientShift 10s infinite alternate;
+    background: 
+        linear-gradient(125deg, #18163c, #2b1532, #140a24, #371363),
+        radial-gradient(circle at 20% 60%, #80298d, #391b6d, transparent);
+    background-blend-mode: overlay;
+    animation: shiftLight 15s infinite alternate;
 }
-
-@keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 100% 50%; }
+@keyframes shiftLight {
+    0% {
+        background-size: 100% 100%, 100% 100%;
+        background-position: 0% 0%, 0% 0%;
+    }
+    100% {
+        background-size: 200% 200%, 120% 120%;
+        background-position: 100% 0%, 10% 20%;
+    }
 }
-
 .hero-content {
     position: relative;
     z-index: 5;
@@ -212,21 +218,21 @@ a, button {
     background-size: cover;
     background-position: center;
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-    opacity: 0.8;
-    transition: transform 0.3s ease;
+    border: none; /* убираем border */
+    /* Используем drop-shadow для свечения */
+    filter: drop-shadow(0 0 15px rgba(39, 171, 176, 0.3));
+    opacity: 0.85;
+    transition: all 0.3s ease;
     pointer-events: auto;
     cursor: pointer;
     z-index: 2;
 }
-
 .square:hover {
     transform: scale(1.2);
     opacity: 1;
-    box-shadow: 0 0 30px cyan;
+   filter: drop-shadow(0 0 15px rgba(156, 39, 176, 1));
     z-index: 100;
 }
-
 /* ===== КАТЕГОРИИ ===== */
 .categories-section {
     padding: 80px 20px 60px;
@@ -263,7 +269,7 @@ a, button {
 
 .category-title {
     text-align: center;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     margin-bottom: 20px;
     color: cyan;
     text-transform: uppercase;
@@ -1810,8 +1816,528 @@ a, button {
         opacity: 0.9;
     }
     
-    /* Уменьшаем количество видимых квадратов на мобильных */
-    .square:nth-child(n+7) {
-        display: none;
+   
+}
+
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: cyan #0a0a0a;
+}
+
+.square {
+    box-shadow: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.square:hover {
+    box-shadow: 0 0 20px cyan;
+    transform: scale(1.2);
+}
+
+/* ===== 3. Блок "Обо мне" на главной странице ===== */
+.home-about {
+    padding: 80px 20px;
+    background: linear-gradient(135deg, #0f0f1a 0%, #1a0f2a 100%);
+    border-top: 1px solid rgba(0, 255, 255, 0.2);
+    border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+}
+.home-about-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 50px;
+    background: rgba(20, 20, 30, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+}
+.home-about-left {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+.home-about-photo {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 4px cyan;
+}
+.home-about-photo img {
+    width: 100%;
+    transition: transform 0.5s;
+}
+.home-about-photo:hover img {
+    transform: scale(1.05);
+}
+.home-education-section,
+.home-interests-section,
+.home-talents-section {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+.home-education-section:hover,
+.home-interests-section:hover,
+.home-talents-section:hover {
+    background: rgba(0, 255, 255, 0.1);
+    transform: translateX(5px);
+    border-left: 3px solid cyan;
+}
+.home-education-section h3,
+.home-interests-section h3,
+.home-talents-section h3 {
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.home-education-section p,
+.home-interests-section p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #ddd;
+}
+.home-talents-list {
+    list-style: none;
+    padding: 0;
+}
+.home-talents-list li {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #ddd;
+    margin-bottom: 8px;
+    padding-left: 20px;
+    position: relative;
+}
+.home-talents-list li::before {
+    content: "✦";
+    position: absolute;
+    left: 0;
+    color: cyan;
+}
+.home-about-right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.home-about-right h1 {
+    font-size: 2.5rem;
+    text-shadow: 0 0 5px cyan;
+}
+.home-bio {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    border-left: 4px solid cyan;
+    padding-left: 20px;
+}
+.home-skills-section h3,
+.home-experience-section h3 {
+    font-size: 1.4rem;
+    margin: 15px 0 10px;
+    color: cyan;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.home-skill-level {
+    margin-bottom: 20px;
+}
+.home-skill-level-title {
+    font-size: 0.8rem;
+    color: white;
+    margin-bottom: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-left: 3px solid cyan;
+    padding-left: 12px;
+}
+.home-skills {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.home-skills li {
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid cyan;
+    padding: 6px 18px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    transition: all 0.3s;
+    color: #fff;
+}
+.home-skills li:hover {
+    background: cyan;
+    color: #0a0a0a;
+    box-shadow: 0 0 20px cyan;
+    transform: translateY(-2px);
+}
+.home-experience-item {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+    border-left: 3px solid rgba(0, 255, 255, 0.3);
+}
+.home-experience-item:hover {
+    background: rgba(0, 255, 255, 0.05);
+    border-left-color: cyan;
+    transform: translateX(5px);
+}
+.home-experience-year {
+    font-size: 0.8rem;
+    color: rgb(62, 226, 255);
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+.home-experience-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+}
+.home-experience-company {
+    font-size: 0.85rem;
+    color: rgba(0, 255, 255, 0.8);
+    margin: 3px 0 8px;
+}
+.home-experience-description {
+    font-size: 0.8rem;
+    color: #ccc;
+    line-height: 1.5;
+}
+
+/* ===== 4. Блок "Контакты" на главной странице ===== */
+.home-contact {
+    padding: 80px 20px;
+    background: radial-gradient(circle at 30% 70%, #2b1a4a, #0a0a0a);
+    text-align: center;
+}
+.home-contact h1 {
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    text-shadow: 0 0 10px magenta;
+}
+.home-contact-grid {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    background: rgba(20, 20, 30, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 0 30px rgb(27, 81, 102);
+    text-align: left;
+}
+.home-contact-left {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.home-contact-info h3,
+.home-social-section h3,
+.home-contact-form h3 {
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.home-contact-info p {
+    font-size: 1rem;
+    margin: 15px 0;
+    color: white;
+}
+.home-contact-info a {
+    color: cyan;
+    text-decoration: none;
+    border-bottom: 1px dashed cyan;
+    transition: all 0.3s;
+}
+.home-contact-info a:hover {
+    color: magenta;
+    border-bottom-color: magenta;
+    text-shadow: 0 0 10px magenta;
+}
+.home-social-section {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0, 255, 255, 0.3);
+}
+.home-social-links-row {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.home-social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 25px;
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid cyan;
+    border-radius: 50px;
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+.home-social-link:hover {
+    background: cyan;
+    color: #0a0a0a;
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px cyan;
+}
+.home-contact-form input,
+.home-contact-form textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    border-radius: 8px;
+    color: white;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+}
+.home-contact-form input:focus,
+.home-contact-form textarea:focus {
+    outline: none;
+    border-color: cyan;
+    box-shadow: 0 0 10px cyan;
+    background: rgba(0, 255, 255, 0.1);
+}
+.home-contact-form button {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 2px solid cyan;
+    color: cyan;
+    font-size: 1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.home-contact-form button:hover {
+    background: cyan;
+    color: #0a0a0a;
+    box-shadow: 0 0 30px cyan;
+    transform: translateY(-2px);
+}
+
+/* ===== 5. Адаптивность для новых блоков ===== */
+@media (max-width: 768px) {
+    .home-about-container,
+    .home-contact-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 25px;
     }
+    .home-about-right h1 {
+        font-size: 1.8rem;
+        text-align: center;
+    }
+    .home-bio {
+        font-size: 0.95rem;
+    }
+    .home-contact h1 {
+        font-size: 1.8rem;
+    }
+    .home-social-links-row {
+        justify-content: center;
+    }
+    .home-contact-info h3,
+    .home-social-section h3,
+    .home-contact-form h3 {
+        font-size: 1.3rem;
+    }
+    .home-contact-info p {
+        font-size: 0.9rem;
+    }
+    .home-social-link {
+        padding: 8px 20px;
+        font-size: 0.9rem;
+    }
+}
+@media (max-width: 480px) {
+    .home-about-container,
+    .home-contact-grid {
+        padding: 20px;
+    }
+    .home-about-right h1 {
+        font-size: 1.4rem;
+    }
+    .home-skills li {
+        font-size: 0.7rem;
+        padding: 4px 12px;
+    }
+    .home-social-links-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    .home-social-link {
+        width: 100%;
+        max-width: 200px;
+        justify-content: center;
+    }
+    .home-contact h1 {
+        font-size: 1.6rem;
+    }
+}
+.categories-section,
+.home-about,
+.home-contact {
+    scroll-margin-top: 80px;
+}
+.main-project-video {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 20px;
+    transition: transform 0.5s ease;
+}
+.main-project-video:hover {
+    transform: scale(1.02);
+}
+.project-item.top-crop img {
+    object-fit: cover;
+    object-position: top center;
+}
+/* Уменьшаем ширину блока описания проекта */
+.project-description {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+}
+.menu a.active {
+    color: cyan;
+    transform: scale(1.2);
+    text-shadow: 0 0 10px cyan;
+}
+/* ===== СТРАНИЦА "ОБО МНЕ" – ПРАВИЛЬНАЯ СТРЕЛКА И ЗАГОЛОВОК ===== */
+
+/* Заголовок страницы – такой же, как у блоков на главной */
+.about .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    text-shadow: 0 0 10px cyan;
+    color: white;
+}
+
+/* Левая колонка – делаем относительной, чтобы стрелка позиционировалась относительно неё */
+.about-left {
+    position: relative;
+}
+
+/* Стрелка возврата – привязана к левому верхнему углу фотографии */
+.about-back-arrow {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 5;
+}
+
+/* Сама кнопка-стрелка (копия стиля со страниц проектов) */
+.about-back-arrow .back-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    font-size: 2rem;
+    color: cyan;
+    text-decoration: none;
+    border: 2px solid cyan;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    background: rgba(0, 255, 255, 0.1);
+}
+
+.about-back-arrow .back-arrow:hover {
+    background: cyan;
+    color: #0a0a0a;
+    transform: scale(1.1);
+    box-shadow: 0 0 20px cyan;
+}
+
+/* Немного отступаем фотографию от стрелки, чтобы не налезала */
+.about-photo {
+    margin-left: 20px;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+    .about .section-title {
+        font-size: 1.8rem;
+        margin-bottom: 25px;
+    }
+    .about-back-arrow .back-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 1.5rem;
+    }
+    .about-photo {
+        margin-left: 10px;
+    }
+}
+
+/* Общие настройки для страницы "Обо мне" */
+.about {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Контейнер для стрелки и заголовка */
+.about-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;               /* уменьшено с 20px для более компактного вида */
+    width: 100%;
+    max-width: 1100px;
+    margin-bottom: 40px;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+/* Стрелка возврата – такая же, как на страницах проектов */
+.about-header .back-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    font-size: 2rem;
+    color: cyan;
+    text-decoration: none;
+    border: 2px solid cyan;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    background: rgba(0, 255, 255, 0.1);
+}
+
+.about-header .back-arrow:hover {
+    background: cyan;
+    color: #0a0a0a;
+    transform: scale(1.1);
+    box-shadow: 0 0 20px cyan;
+}
+
+/* Заголовок – убран flex:1, чтобы стрелка и заголовок были прижаты друг к другу */
+.about .section-title {
+    margin: 0;
+    text-align: center;
 }

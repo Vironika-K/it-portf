@@ -17,7 +17,7 @@
     <ul>
         <li><a href="index.html" class="active">Главная</a></li>
         <li><a href="about.html">Обо мне</a></li>
-        <li><a href="contact.html">Контакты</a></li>
+        <li><a href="#contact">Контакты</a></li>   <!-- было index.html#contact -->
     </ul>
 </nav>
 <div class="menu-overlay"></div>
@@ -27,8 +27,8 @@
         <section class="hero">
             <canvas id="hero-canvas"></canvas>
     <div class="hero-content">
-        <h1 class="glitch" data-text="Привет, я 3D-художница">Привет, я 3D-художница</h1>
-        <p class="subtitle">Создаю миры, в которых хочется остаться</p>
+        <h1 class="glitch" data-text="Привет, я 3D-художница">Привет, я D.Vi - 2D / 3D-художница</h1>
+        <p class="subtitle">В основном занимаюсь проработкой персонажей и созданием game-ready моделей </p>
     </div>
     <div class="floating-squares">
         <!-- сюда JS будет генерировать 10 маленьких квадратов -->
@@ -55,11 +55,12 @@
                     <div class="category-project-item" data-project="compass">
                         <img src="images/compass.png" alt="Compass">
                         <span>Компас</span>
+                    </div>  
+                    <div class="category-project-item" data-project="Tower">
+                        <img src="images/tower.png" alt="Tower">
+                        <span>Tower</span>
                     </div>
-                    <div class="category-project-item" data-project="car">
-                        <img src="images/car.png" alt="Car">
-                        <span>Машина</span>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -69,10 +70,10 @@
             <h3 class="category-title">Окружение и Анимация</h3>
             <div class="category-projects-wrapper">
                 <div class="category-projects">
-                    <div class="category-project-item" data-project="scene">
-                        <img src="images/tower.png" alt="Scene">
-                        <span>Сцена (окружение)</span>
-                    </div>
+                     <div class="category-project-item" data-project="car">
+                        <img src="images/car.png" alt="Car">
+                        <span>Машина</span>
+                    </div>  
                     <div class="category-project-item" data-project="zombie">
                         <img src="images/ded.png" alt="Zombie Animation">
                         <span>Анимация зомби</span>
@@ -106,6 +107,22 @@
                         <img src="images/drag.png" alt="Dragon">
                         <span>Drag</span>
                     </div>
+                    <div class="category-project-item" data-project="sharkula">
+                        <img src="images/sharkula.png" alt="Sharkula">
+                        <span>Sharkula</span>
+                    </div>
+                    <div class="category-project-item" data-project="elf-halloween">
+                        <img src="images/elf-halloween.png" alt="Elf Halloween">
+                        <span>Elf Halloween</span>
+                    </div>
+                    <div class="category-project-item" data-project="firefly">
+                        <img src="images/firefly.png" alt="Firefly">
+                        <span>Firefly</span>
+                    </div>
+                    <div class="category-project-item" data-project="man">
+                        <img src="images/man.png" alt="Man">
+                        <span>Man</span>
+                    </div>
                 </div>
             </div>
             <!-- Индикатор скролла -->
@@ -117,52 +134,133 @@
     </div>
 </div>
 <!-- Сетка избранных проектов (8 проектов) -->
+
 <section class="projects-grid">
-    <h2 class="section-title">Избранные проекты</h2>
+    <h2 class="section-title">Последние проекты</h2>
     <div class="grid-container">
-        <!-- Первый ряд - 4 проекта -->
-        <a href="projects/project1.html" class="project-item" data-project-id="1" style="transform: rotate(-2deg);">
-            <img src="images/bag.png" alt="Bag">
-            <span class="project-title">Bag</span>
-        </a>
-        <a href="projects/project2.html" class="project-item" data-project-id="2" style="transform: rotate(3deg) translateY(20px);">
+       
+
+        <!-- Compass -->
+        <a href="projects/project2.html" class="project-item top-crop" data-project-id="2">
             <img src="images/compass.png" alt="Compass">
             <span class="project-title">Compass</span>
         </a>
-        <a href="projects/project3.html" class="project-item" data-project-id="3" style="transform: rotate(-1deg) scale(1.1);">
-            <img src="images/car.png" alt="Car">
-            <span class="project-title">Car</span>
-        </a>
-        <a href="projects/project4.html" class="project-item" data-project-id="4" style="transform: rotate(5deg) translateX(-20px);">
-            <img src="images/lex.png" alt="Lex">
-            <span class="project-title">Lex</span>
-        </a>
-        
-        <!-- Второй ряд - 4 проекта -->
-        <a href="projects/project5.html" class="project-item" data-project-id="5" style="transform: rotate(-4deg) translate(10px, -10px);">
-            <img src="images/spider.png" alt="Spider">
-            <span class="project-title">Spider</span>
-        </a>
-        <a href="projects/project6.html" class="project-item" data-project-id="6" style="transform: rotate(2deg) translateY(-5px);">
+        <!-- Mirel -->
+        <a href="projects/project6.html" class="project-item top-crop" data-project-id="6">
             <img src="images/mirel.png" alt="Mirel">
             <span class="project-title">Mirel</span>
         </a>
-        <a href="projects/project7.html" class="project-item" data-project-id="7" style="transform: rotate(-3deg) translateX(15px);">
-            <img src="images/tower.png" alt="Scene">
-            <span class="project-title">Сцена</span>
-        </a>
-        <a href="projects/project8.html" class="project-item" data-project-id="8" style="transform: rotate(1deg) scale(0.95);">
-            <img src="images/ded.png" alt="Zombie Animation">
+        <!-- Zombie Animation -->
+        <a href="projects/project8.html" class="project-item top-crop" data-project-id="8">
+            <img src="images/ded.png" alt="Анимация зомби">
             <span class="project-title">Анимация зомби</span>
         </a>
+        <!-- Sharkula -->
+        <a href="projects/project11.html" class="project-item top-crop" data-project-id="11">
+            <img src="images/sharkula.png" alt="Sharkula">
+            <span class="project-title">Sharkula</span>
+        </a>  
     </div>
 </section>
+
+
+  <!-- ===== БЛОК "ОБО МНЕ" (НА ГЛАВНОЙ) ===== 
+        <section class="home-about" id="about">
+            <h2 class="section-title">Обо мне</h2>
+            <div class="home-about-container">
+                <div class="home-about-left">
+                    <div class="home-about-photo">
+                        <img src="images/me.png" alt="Фото художницы">
+                    </div>
+                    <div class="home-education-section">
+                        <h3>Образование</h3>
+                        <p>2015-2026+ – Самообучение 2D рисунку <br> 2024-2026+ – Самообучение 3D моделированию <br> 2020-2026 – СПбГУПТД ИИТА, направление "Прикладная информатика в Дизайне"</p>
+                    </div>
+                    <div class="home-interests-section">
+                        <h3>Интересы</h3>
+                        <p>CG рисование, 3D скульпт органики. Игры в жанре Шутеры, Киберпанк, научная фантастика, дарк фентези.</p>
+                    </div>
+                    <div class="home-talents-section">
+                        <h3>Таланты</h3>
+                        <ul class="home-talents-list">
+                            <li>Быстрое освоение новых инструментов</li>
+                            <li>Внимание к деталям и Креативное мышление</li>
+                            <li>Тайм-менеджмент</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="home-about-right">
+                    <h1>Кулакова Вироника</h1>
+                    <p class="home-bio">2D/3D-художница с 5-летним опытом. Моделирую в Blender объекты и предметы окружения, создаю с 0 game-ready персонажей. Работаю над текстурами и освещением сцен. Умею настраивать риг и создавать анимации. Вдохновляюсь природой, киберпанком и дарк фентези.</p>
+                    <div class="home-skills-section">
+                        <h3>Навыки</h3>
+                        <div class="home-skill-level">
+                            <h4 class="home-skill-level-title">Средний уровень</h4>
+                            <ul class="home-skills">
+                                <li>3D-моделирование</li>
+                                <li>Blender</li>
+                                <li>Substance Painter</li>
+                                <li>Adobe Photoshop</li>
+                                <li>Adobe Premier Pro</li>
+                                <li>Krita</li>
+                            </ul>
+                        </div>
+                        <div class="home-skill-level">
+                            <h4 class="home-skill-level-title">Базовый уровень</h4>
+                            <ul class="home-skills">
+                                <li>ZBrush</li>
+                                <li>Maya</li>
+                                <li>Marvelous Designer</li>
+                                <li>Fiber Shop</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="home-experience-section">
+                        <h3>Опыт работы</h3>
+                        <div class="home-experience-item">
+                            <div class="home-experience-year">2020 — 2026+</div>
+                            <div class="home-experience-title">2D/3D-художник</div>
+                            <div class="home-experience-company">Freelance</div>
+                            <div class="home-experience-description">Разработка 3D-моделей предметов и объектов окружения для игровых проектов. Оформление текстур и освещения сцен. Отрисовка концепт артов. Создание уникальных персонажей, включая анимацию, как в 3D, так и в 2D.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        -->
+        <!-- ===== БЛОК "КОНТАКТЫ" (НА ГЛАВНОЙ) ===== -->
+        <section class="home-contact" id="contact">
+            <h1>Свяжитесь со мной</h1>
+            <div class="home-contact-grid">
+                <div class="home-contact-left">
+                    <div class="home-contact-info">
+                        <h3>Контакты</h3>
+                        <p><strong>Email:</strong> <a href="mailto:qweJO16@gmail.com">qweJO16@gmail.com</a></p>
+                        <p><strong>Телефон:</strong> <a href="tel:+79650075925">+7 (965) 007-59-25</a></p>
+                    </div>
+                    <div class="home-social-section">
+                        <h3>Социальные сети</h3>
+                        <div class="home-social-links-row">
+                            <a href="#" target="_blank" class="home-social-link">ArtStation</a>
+                            <a href="#" target="_blank" class="home-social-link">VK</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="home-contact-form">
+                    <h3>Напишите мне</h3>
+                    <form id="home-feedback-form">
+                        <input type="text" placeholder="Ваше имя" required>
+                        <input type="email" placeholder="Email" required>
+                        <textarea placeholder="Сообщение" rows="5" required></textarea>
+                        <button type="submit">Отправить ➔</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+       
     </main>
 
-    <!-- Кнопка "Наверх" -->
-    <button id="back-to-top" title="Наверх">↑</button>
-
+    <button id="back-to-top">↑</button>
     <script src="js/main.js"></script>
-    
 </body>
 </html>

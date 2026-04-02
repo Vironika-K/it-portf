@@ -11,12 +11,12 @@
     <div class="menu-trigger-area"></div>
     <div class="burger-icon">☰</div>
     <nav class="menu">
-        <ul>
-            <li><a href="../index.html">Главная</a></li>
-            <li><a href="../about.html">Обо мне</a></li>
-            <li><a href="../contact.html">Контакты</a></li>
-        </ul>
-    </nav>
+    <ul>
+        <li><a href="index.html">Главная</a></li>
+        <li><a href="about.html">Обо мне</a></li>
+        <li><a href="../index.html#contact">Контакты</a></li>
+    </ul>
+</nav>
     <div class="menu-overlay"></div>
 
     <main class="project-page">
@@ -33,31 +33,36 @@
             <span>Категория: Окружение и Анимация</span>
         </div>
 
+        <!-- ВИДЕО вместо статического изображения -->
         <div class="main-image-container">
-            <img src="../images/ded.png" alt="Zombie - Главный рендер" class="main-project-image">
+            <video class="main-project-video" autoplay loop muted playsinline>
+                <source src="../images/zombie-anim.mp4" type="video/mp4">
+                Ваш браузер не поддерживает видео.
+            </video>
         </div>
 
         <div class="project-description">
-            <p>Цикл анимации зомби: ходьба, атака, смерть. Работа над риггингом, анимацией и текстурами. Персонаж имеет 40+ контроллеров для реалистичной анимации.</p>
-            <p>Инструменты: Blender (риггинг, анимация), Substance Painter (текстуры).</p>
+            <p>Работа над риггингом, анимацией и текстурами. Анимация в стиле игровой - от первого лица. Главный герой идет с фонарем по темному коридору больницы, где неожиданно встречает зомби.</p>
+            <p>Инструменты: Blender (риггинг, анимация).</p>
         </div>
 
+        <!-- Этапы работы (только статические изображения) -->
         <div class="workflow-section">
             <h2 class="workflow-title">Этапы работы</h2>
             <div class="workflow-stage-container">
                 <img id="workflow-stage-image" src="../images/zombie-ref.png" alt="Этап работы" class="workflow-stage-image">
-                <p id="workflow-stage-label" class="workflow-stage-label">Референсы</p>
+                <p id="workflow-stage-label" class="workflow-stage-label">Лоу Поли</p>
             </div>
             <div class="workflow-dots">
-                <div class="workflow-dot active" data-stage="0" data-image="../images/zombie-ref.png" data-label="Референсы"></div>
-                <div class="workflow-dot" data-stage="1" data-image="../images/zombie-sc.png" data-label="Скульпт"></div>
-                <div class="workflow-dot" data-stage="2" data-image="../images/zombie-anim.gif" data-label="Анимация"></div>
+                <div class="workflow-dot active" data-stage="0" data-image="../images/zombie-ref.png" data-label="Лоу Поли"></div>
+                <div class="workflow-dot" data-stage="1" data-image="../images/zombie-rig.png" data-label="Риг"></div>
+                <div class="workflow-dot" data-stage="2" data-image="../images/zombie-rend1.png" data-label="Рендер"></div>
             </div>
         </div>
 
         <div class="project-navigation">
             <a href="project7.html" class="prev">← Предыдущий</a>
-            <a href="project1.html" class="next">Следующий →</a>
+            <a href="project9.html" class="next">Следующий →</a>
         </div>
     </main>
 

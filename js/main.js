@@ -13,7 +13,7 @@ backToTopButton.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-// Данные для маленьких квадратов (10 уникальных изображений)
+// Данные для маленьких квадратов (14 изображений)
 const smallSquareImages = [
     'images/elf.png',
     'images/lex.png',
@@ -24,7 +24,11 @@ const smallSquareImages = [
     'images/drag.png',
     'images/ded.png',
     'images/tower.png',
-    'images/mirel.png'
+    'images/mirel.png',
+    'images/sharkula.png',
+    'images/elf-halloween.png',
+    'images/firefly.png',
+    'images/man.png'
 ];
 
 // Массив для хранения всех квадратов
@@ -38,11 +42,19 @@ if (squaresContainer) {
     squares = [];
     
     const shuffled = [...smallSquareImages].sort(() => Math.random() - 0.5);
+    const topCenterImages = ['elf', 'elf-halloween', 'sharkula', 'firefly', 'man'];
     
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < smallSquareImages.length; i++) {
         const square = document.createElement('div');
         square.className = 'square';
-        square.style.backgroundImage = `url(${shuffled[i]})`;
+        const imgUrl = shuffled[i];
+        square.style.backgroundImage = `url(${imgUrl})`;
+        
+        let bgPos = 'center';
+        if (topCenterImages.some(name => imgUrl.includes(name))) {
+            bgPos = 'top center';
+        }
+        square.style.backgroundPosition = bgPos;
         
         const startX = 50 + Math.random() * (window.innerWidth - 200);
         const startY = 50 + Math.random() * (window.innerHeight - 200);
@@ -168,7 +180,7 @@ if (squares.length > 0) {
     updateSquarePositions();
 }
 
-// Обработка формы обратной связи
+// Обработка формы обратной связи (на странице contact.html)
 const feedbackForm = document.getElementById('feedback-form');
 if (feedbackForm) {
     feedbackForm.addEventListener('submit', (e) => {
@@ -178,10 +190,10 @@ if (feedbackForm) {
     });
 }
 
-// ===== Бургер-меню с кликом и ховером =====
+// ===== БУРГЕР-МЕНЮ =====
 const burger = document.querySelector('.burger-icon');
 const menuTrigger = document.querySelector('.menu-trigger-area');
-const menu = document.querySelector('.menu');
+const menuEl = document.querySelector('.menu');
 const body = document.body;
 
 let menuOpenByClick = false;
@@ -213,35 +225,55 @@ if (menuTrigger) {
     menuTrigger.addEventListener('mouseenter', openMenu);
     menuTrigger.addEventListener('mouseleave', closeMenu);
 }
-
-if (menu) {
-    menu.addEventListener('mouseenter', openMenu);
-    menu.addEventListener('mouseleave', closeMenu);
+if (menuEl) {
+    menuEl.addEventListener('mouseenter', openMenu);
+    menuEl.addEventListener('mouseleave', closeMenu);
 }
 
-// Скролл к секции проектов при клике на стрелку
-const scrollIndicator = document.getElementById('scrollIndicator');
-const projectsGrid = document.querySelector('.projects-grid');
+// Логика для главной страницы и страницы "Обо мне": открыто при загрузке, закрывается при скролле вниз, открывается при скролле наверх
+const isSpecialPage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/') || window.location.pathname.endsWith('about.html');
+if (isSpecialPage) {
+    if (!menuOpenByClick) {
+        body.classList.add('menu-open');
+    }
+    let lastScrollTop = 0;
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+        if (currentScroll > lastScrollTop && currentScroll > 0) {
+            if (!menuOpenByClick) {
+                body.classList.remove('menu-open');
+            }
+        } else if (currentScroll === 0) {
+            if (!menuOpenByClick) {
+                body.classList.add('menu-open');
+            }
+        }
+        lastScrollTop = currentScroll;
+    });
+}
 
-if (scrollIndicator && projectsGrid) {
+// Скролл к секции категорий при клике на стрелку
+const scrollIndicator = document.getElementById('scrollIndicator');
+const categoriesSection = document.querySelector('.categories-section');
+
+if (scrollIndicator && categoriesSection) {
     scrollIndicator.addEventListener('click', () => {
         scrollIndicator.classList.add('hidden');
-        projectsGrid.scrollIntoView({ 
+        categoriesSection.scrollIntoView({ 
             behavior: 'smooth', 
             block: 'start' 
         });
     });
 }
 
-let lastScrollTop = 0;
+// Восстановление стрелки при скролле наверх
+let lastScrollTopForArrow = 0;
 window.addEventListener('scroll', () => {
     const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-    
     if (scrollIndicator && currentScroll < 100 && scrollIndicator.classList.contains('hidden')) {
         scrollIndicator.classList.remove('hidden');
     }
-    
-    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    lastScrollTopForArrow = currentScroll <= 0 ? 0 : currentScroll;
 });
 
 window.addEventListener('resize', () => {
@@ -272,7 +304,7 @@ squaresElements.forEach(square => {
     square.addEventListener('mouseleave', handleSquareMouseLeave);
 });
 
-// ===== БОЛЬШИЕ КАРТОЧКИ ПРОЕКТОВ ПРИ НАВЕДЕНИИ =====
+// ===== БОЛЬШИЕ КАРТОЧКИ ПРОЕКТОВ =====
 let bigCardContainer = null;
 let currentActiveSquare = null;
 let isHoveringCard = false;
@@ -280,7 +312,6 @@ let hideCardTimeout = null;
 
 function createBigCardContainer() {
     if (bigCardContainer) return bigCardContainer;
-    
     const container = document.createElement('div');
     container.className = 'big-project-card';
     container.style.cssText = `
@@ -299,7 +330,6 @@ function createBigCardContainer() {
         cursor: pointer;
         pointer-events: auto;
     `;
-    
     container.addEventListener('mouseenter', () => {
         isHoveringCard = true;
         if (hideCardTimeout) {
@@ -307,12 +337,10 @@ function createBigCardContainer() {
             hideCardTimeout = null;
         }
     });
-    
     container.addEventListener('mouseleave', () => {
         isHoveringCard = false;
         hideBigCardWithDelay();
     });
-    
     document.body.appendChild(container);
     bigCardContainer = container;
     return container;
@@ -321,56 +349,56 @@ function createBigCardContainer() {
 const bigProjectData = {
     'images/bag.png': {
         title: 'Bag',
-        description: 'Сумка в стиле киберпанк, созданная в Blender и Substance Painter.',
+        description: 'Сумка в фентези стиле, созданная в Blender и Substance Painter.',
         link: 'projects/project1.html',
         fullImage: 'images/bag.png',
         objectPosition: 'center'
     },
     'images/compass.png': {
         title: 'Compass',
-        description: 'Стилизованный компас с элементами стимпанк.',
+        description: 'Стилизованный магический компас.',
         link: 'projects/project2.html',
         fullImage: 'images/compass.png',
         objectPosition: 'center'
     },
     'images/car.png': {
         title: 'Car',
-        description: 'Футуристический автомобиль, вдохновлённый киберпанком.',
+        description: 'Ретро Volkswagen T1 Samba Bus.',
         link: 'projects/project3.html',
         fullImage: 'images/car.png',
         objectPosition: 'center'
     },
     'images/lex.png': {
         title: 'Lex',
-        description: 'Персонаж-робот Lex, созданный для концепт-арта.',
+        description: 'Персонаж-робот Lex, вдохновленный вселенной Warhammer.',
         link: 'projects/project4.html',
         fullImage: 'images/lex.png',
         objectPosition: 'center'
     },
     'images/spider.png': {
         title: 'Spider',
-        description: 'Механический паук, вдохновлённый вселенной Horizon.',
+        description: 'Жуткий паучок с рудой и драгоценными камнями на спинке.',
         link: 'projects/project5.html',
         fullImage: 'images/spider.png',
         objectPosition: 'center'
     },
     'images/mirel.png': {
         title: 'Mirel',
-        description: 'Сюрреалистическая сцена с элементами биомеханики.',
+        description: 'Персонаж для дипломной работы.',
         link: 'projects/project6.html',
         fullImage: 'images/mirel.png',
         objectPosition: 'top center'
     },
     'images/tower.png': {
-        title: 'Scene',
-        description: 'Фэнтезийная сцена с башней и окружением.',
+        title: 'Tower',
+        description: 'Фэнтезийная сцена с башней.',
         link: 'projects/project7.html',
         fullImage: 'images/tower.png',
         objectPosition: 'center'
     },
     'images/ded.png': {
         title: 'Zombie Animation',
-        description: 'Цикл анимации зомби: ходьба, атака, смерть.',
+        description: 'Анимация про зомби и больницу.',
         link: 'projects/project8.html',
         fullImage: 'images/ded.png',
         objectPosition: 'center'
@@ -384,29 +412,52 @@ const bigProjectData = {
     },
     'images/drag.png': {
         title: 'Drag',
-        description: 'Мифический дракон, созданный для портфолио.',
+        description: 'Жуткий Драг-монстр, скульпт созданный для портфолио.',
         link: 'projects/project10.html',
         fullImage: 'images/drag.png',
         objectPosition: 'center'
+    },
+    'images/sharkula.png': {
+        title: 'Sharkula',
+        description: 'Цифровой рисунок персонажа Sharkula.',
+        link: 'projects/project11.html',
+        fullImage: 'images/sharkula.png',
+        objectPosition: 'top center'
+    },
+    'images/elf-halloween.png': {
+        title: 'Elf Halloween',
+        description: 'Фэнтези-эльф в хэллоуинском стиле.',
+        link: 'projects/project12.html',
+        fullImage: 'images/elf-halloween.png',
+        objectPosition: 'top center'
+    },
+    'images/firefly.png': {
+        title: 'Firefly',
+        description: 'Атмосферный 2D арт со светлячками.',
+        link: 'projects/project13.html',
+        fullImage: 'images/firefly.png',
+        objectPosition: 'top center'
+    },
+    'images/man.png': {
+        title: 'Man',
+        description: 'Портрет мужчины, цифровой рисунок.',
+        link: 'projects/project14.html',
+        fullImage: 'images/man.png',
+        objectPosition: 'top center'
     }
 };
 
 function showBigCard(square, imageUrl) {
     const container = createBigCardContainer();
     const projectData = bigProjectData[imageUrl];
-    
     if (!projectData) return;
-    
     currentActiveSquare = square;
     isHoveringCard = false;
-    
     if (hideCardTimeout) {
         clearTimeout(hideCardTimeout);
         hideCardTimeout = null;
     }
-    
     const rect = square.getBoundingClientRect();
-    
     container.innerHTML = `
         <img src="${projectData.fullImage}" alt="${projectData.title}" style="width: 100%; height: 200px; object-fit: cover; object-position: ${projectData.objectPosition};">
         <div style="padding: 15px;">
@@ -414,30 +465,17 @@ function showBigCard(square, imageUrl) {
             <p style="color: #ccc; font-size: 0.85rem; line-height: 1.4;">${projectData.description}</p>
         </div>
     `;
-    
     if (projectData.link) {
         container.style.cursor = 'pointer';
-        const clickHandler = () => {
-            window.location.href = projectData.link;
-        };
+        const clickHandler = () => { window.location.href = projectData.link; };
         container.removeEventListener('click', clickHandler);
         container.addEventListener('click', clickHandler);
     }
-    
     let left = rect.right + 15;
     let top = rect.top - 50;
-    
-    if (left + 340 > window.innerWidth) {
-        left = rect.left - 340;
-    }
-    
-    if (top < 10) {
-        top = 10;
-    }
-    if (top + 380 > window.innerHeight) {
-        top = window.innerHeight - 390;
-    }
-    
+    if (left + 340 > window.innerWidth) left = rect.left - 340;
+    if (top < 10) top = 10;
+    if (top + 380 > window.innerHeight) top = window.innerHeight - 390;
     container.style.left = left + 'px';
     container.style.top = top + 'px';
     container.style.display = 'flex';
@@ -455,10 +493,8 @@ function hideBigCardWithDelay() {
 
 function hideBigCard() {
     if (hideCardTimeout) clearTimeout(hideCardTimeout);
-    if (bigCardContainer) {
-        bigCardContainer.style.display = 'none';
-        currentActiveSquare = null;
-    }
+    if (bigCardContainer) bigCardContainer.style.display = 'none';
+    currentActiveSquare = null;
     isHoveringCard = false;
 }
 
@@ -466,18 +502,13 @@ const allSquares = document.querySelectorAll('.square');
 allSquares.forEach(square => {
     const bgImage = square.style.backgroundImage;
     const imageUrl = bgImage.slice(5, -2).replace(/['"]/g, '');
-    
     square.removeEventListener('mouseenter', square._mouseEnterHandler);
     square.removeEventListener('mouseleave', square._mouseLeaveHandler);
-    
     square._mouseEnterHandler = (e) => {
         e.stopPropagation();
         showBigCard(square, imageUrl);
     };
-    square._mouseLeaveHandler = () => {
-        hideBigCardWithDelay();
-    };
-    
+    square._mouseLeaveHandler = () => hideBigCardWithDelay();
     square.addEventListener('mouseenter', square._mouseEnterHandler);
     square.addEventListener('mouseleave', square._mouseLeaveHandler);
 });
@@ -485,7 +516,7 @@ allSquares.forEach(square => {
 window.addEventListener('scroll', hideBigCard);
 window.addEventListener('resize', hideBigCard);
 
-// ===== НАВИГАЦИЯ МЕЖДУ ПРОЕКТАМИ (ЗАЦИКЛЕННАЯ ДЛЯ 8 И 10 ПРОЕКТОВ) =====
+// ===== НАВИГАЦИЯ МЕЖДУ ПРОЕКТАМИ =====
 const currentPage = window.location.pathname;
 const projectMatch = currentPage.match(/project(\d+)\.html/);
 const currentProjectId = projectMatch ? parseInt(projectMatch[1]) : null;
@@ -497,7 +528,7 @@ function getNextProject(currentId, isFeatured = false) {
         return next;
     } else {
         let next = currentId + 1;
-        if (next > 10) next = 1;
+        if (next > 14) next = 1;
         return next;
     }
 }
@@ -509,7 +540,7 @@ function getPrevProject(currentId, isFeatured = false) {
         return prev;
     } else {
         let prev = currentId - 1;
-        if (prev < 1) prev = 10;
+        if (prev < 1) prev = 14;
         return prev;
     }
 }
@@ -519,37 +550,24 @@ const isFeaturedProject = currentProjectId && currentProjectId >= 1 && currentPr
 if (currentProjectId) {
     const prevLink = document.querySelector('.project-navigation .prev');
     const nextLink = document.querySelector('.project-navigation .next');
-    
     if (prevLink) {
-        const prevId = getPrevProject(currentProjectId, isFeaturedProject);
-        prevLink.href = `project${prevId}.html`;
+        prevLink.href = `project${getPrevProject(currentProjectId, isFeaturedProject)}.html`;
     }
-    
     if (nextLink) {
-        const nextId = getNextProject(currentProjectId, isFeaturedProject);
-        nextLink.href = `project${nextId}.html`;
+        nextLink.href = `project${getNextProject(currentProjectId, isFeaturedProject)}.html`;
     }
 }
 
 // ===== СОХРАНЕНИЕ ИСТОЧНИКА ПЕРЕХОДА ДЛЯ КНОПКИ ВОЗВРАТА =====
-const featuredProjects = document.querySelectorAll('.project-item');
-featuredProjects.forEach(project => {
-    project.addEventListener('click', () => {
-        localStorage.setItem('returnFrom', 'featured');
-    });
+document.querySelectorAll('.project-item').forEach(project => {
+    project.addEventListener('click', () => localStorage.setItem('returnFrom', 'featured'));
 });
-
-const categoryProjects = document.querySelectorAll('.category-project-item');
-categoryProjects.forEach(project => {
-    project.addEventListener('click', () => {
-        localStorage.setItem('returnFrom', 'categories');
-    });
+document.querySelectorAll('.category-project-item').forEach(project => {
+    project.addEventListener('click', () => localStorage.setItem('returnFrom', 'categories'));
 });
-
 const backArrow = document.querySelector('.back-arrow');
 if (backArrow) {
     const returnFrom = localStorage.getItem('returnFrom');
-    
     if (returnFrom === 'categories') {
         backArrow.href = '../index.html#categories';
         backArrow.title = 'Вернуться к категориям';
@@ -557,92 +575,74 @@ if (backArrow) {
         backArrow.href = '../index.html#featured';
         backArrow.title = 'Вернуться к избранным';
     }
-    
-    setTimeout(() => {
-        localStorage.removeItem('returnFrom');
-    }, 500);
+    setTimeout(() => localStorage.removeItem('returnFrom'), 500);
 }
 
-// ===== ПЛАВНЫЙ СКРОЛЛ К СЕКЦИЯМ =====
-if (window.location.hash === '#featured') {
-    const featuredSection = document.querySelector('.projects-grid');
-    if (featuredSection) {
-        setTimeout(() => {
-            featuredSection.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-    }
-}
+// ===== ПЛАВНЫЙ СКРОЛЛ ПО ЯКОРЯМ (без анимации подсветки) =====
 
-if (window.location.hash === '#categories') {
-    const categoriesSection = document.querySelector('.categories-section');
-    if (categoriesSection) {
-        setTimeout(() => {
-            categoriesSection.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-    }
-}
-
-// ===== ОБНОВЛЁННЫЕ ССЫЛКИ ДЛЯ КАТЕГОРИЙ =====
-const categoryProjectLinks = {
-    bag: 'projects/project1.html',
-    compass: 'projects/project2.html',
-    car: 'projects/project3.html',
-    lex: 'projects/project4.html',
-    spider: 'projects/project5.html',
-    mirel: 'projects/project6.html',
-    scene: 'projects/project7.html',
-    zombie: 'projects/project8.html',
-    elf: 'projects/project9.html',
-    drag: 'projects/project10.html'
-};
-
-const categoryItems = document.querySelectorAll('.category-project-item');
-categoryItems.forEach(item => {
-    const project = item.getAttribute('data-project');
-    item.removeEventListener('click', item._clickHandler);
-    const clickHandler = (e) => {
-        e.stopPropagation();
-        if (categoryProjectLinks[project]) {
-            localStorage.setItem('returnFrom', 'categories');
-            window.location.href = categoryProjectLinks[project];
-        }
-    };
-    item._clickHandler = clickHandler;
-    item.addEventListener('click', clickHandler);
-});
-
-// ===== ССЫЛКИ ДЛЯ ИЗБРАННЫХ ПРОЕКТОВ =====
-const featuredProjectLinks = {
-    'Bag': 'projects/project1.html',
-    'Compass': 'projects/project2.html',
-    'Car': 'projects/project3.html',
-    'Lex': 'projects/project4.html',
-    'Spider': 'projects/project5.html',
-    'Mirel': 'projects/project6.html',
-    'Сцена': 'projects/project7.html',
-    'Анимация зомби': 'projects/project8.html'
-};
-
-const featuredProjectItems = document.querySelectorAll('.project-item');
-featuredProjectItems.forEach(project => {
-    const title = project.querySelector('.project-title')?.innerText;
-    project.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (title && featuredProjectLinks[title]) {
-            localStorage.setItem('returnFrom', 'featured');
-            window.location.href = featuredProjectLinks[title];
+// Обработка кликов по ссылке "Контакты" на любой странице
+document.querySelectorAll('a[href="index.html#contact"], a[href="../index.html#contact"], a[href="#contact"]').forEach(link => {
+    link.addEventListener('click', function(e) {
+        const isIndex = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/');
+        if (isIndex) {
+            // На главной странице: только плавный скролл
+            e.preventDefault();
+            const contactSection = document.getElementById('contact');
+            if (contactSection) {
+                contactSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        } else {
+            // На других страницах: сохраняем флаг и переходим на главную
+            e.preventDefault();
+            sessionStorage.setItem('scrollToContact', 'true');
+            window.location.href = 'index.html';
         }
     });
 });
 
-// Анимированный фон для герой-секции (аналог bg-59)
+// При загрузке главной страницы проверяем флаг и делаем плавный скролл
+if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/')) {
+    const shouldScroll = sessionStorage.getItem('scrollToContact');
+    if (shouldScroll === 'true') {
+        sessionStorage.removeItem('scrollToContact');
+        const contactSection = document.getElementById('contact');
+        if (contactSection) {
+            setTimeout(() => {
+                contactSection.scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+        }
+    }
+
+    // Если якорь #contact уже в URL – плавный скролл
+    if (window.location.hash === '#contact') {
+        const contactSection = document.getElementById('contact');
+        if (contactSection) {
+            setTimeout(() => {
+                contactSection.scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+        }
+    }
+}
+
+// Обработка остальных якорей (не #contact) на той же странице
+document.querySelectorAll('a[href^="#"]:not([href="#contact"]):not([href="index.html#contact"]):not([href="../index.html#contact"])').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+            e.preventDefault();
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+});
+
+// ===== АНИМИРОВАННЫЙ ФОН ДЛЯ ГЕРОЙ-СЕКЦИИ =====
 const canvas = document.getElementById('hero-canvas');
 if (canvas) {
     const ctx = canvas.getContext('2d');
     let width, height;
     let particles = [];
-    let hue = 270; // Фиолетовый оттенок
-    
     function initCanvas() {
         const hero = document.querySelector('.home .hero');
         if (hero) {
@@ -652,7 +652,6 @@ if (canvas) {
             canvas.height = height;
         }
     }
-    
     function createParticles() {
         const particleCount = Math.floor(width * height / 8000);
         particles = [];
@@ -667,12 +666,9 @@ if (canvas) {
             });
         }
     }
-    
     function draw() {
         if (!ctx) return;
         ctx.clearRect(0, 0, width, height);
-        
-        // Рисуем линии между близкими частицами
         for (let i = 0; i < particles.length; i++) {
             const p1 = particles[i];
             for (let j = i + 1; j < particles.length; j++) {
@@ -685,39 +681,30 @@ if (canvas) {
                     ctx.moveTo(p1.x, p1.y);
                     ctx.lineTo(p2.x, p2.y);
                     const opacity = (1 - distance / 120) * 0.3;
-                    ctx.strokeStyle = `rgba(138, 43, 226, ${opacity})`; // Фиолетовый
+                    ctx.strokeStyle = `rgba(138, 43, 226, ${opacity})`;
                     ctx.lineWidth = 0.8;
                     ctx.stroke();
                 }
             }
         }
-        
-        // Рисуем частицы
         for (const p of particles) {
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
             ctx.fillStyle = `rgba(138, 43, 226, ${p.opacity})`;
             ctx.fill();
-            
-            // Движение
             p.x += p.speedX;
             p.y += p.speedY;
-            
-            // Отскок от границ
             if (p.x < 0) p.x = width;
             if (p.x > width) p.x = 0;
             if (p.y < 0) p.y = height;
             if (p.y > height) p.y = 0;
         }
-        
         requestAnimationFrame(draw);
     }
-    
     function handleResize() {
         initCanvas();
         createParticles();
     }
-    
     window.addEventListener('resize', handleResize);
     initCanvas();
     createParticles();
