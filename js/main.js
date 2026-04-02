@@ -502,6 +502,8 @@ const allSquares = document.querySelectorAll('.square');
 allSquares.forEach(square => {
     const bgImage = square.style.backgroundImage;
     const imageUrl = bgImage.slice(5, -2).replace(/['"]/g, '');
+    
+    // Наведение – большая карточка
     square.removeEventListener('mouseenter', square._mouseEnterHandler);
     square.removeEventListener('mouseleave', square._mouseLeaveHandler);
     square._mouseEnterHandler = (e) => {
@@ -511,50 +513,61 @@ allSquares.forEach(square => {
     square._mouseLeaveHandler = () => hideBigCardWithDelay();
     square.addEventListener('mouseenter', square._mouseEnterHandler);
     square.addEventListener('mouseleave', square._mouseLeaveHandler);
+    
+    // КЛИК ПО КВАДРАТУ – переход на страницу проекта
+    square.removeEventListener('click', square._clickHandler);
+    square._clickHandler = () => {
+        const projectData = bigProjectData[imageUrl];
+        if (projectData && projectData.link) {
+            window.location.href = projectData.link;
+        }
+    };
+    square.addEventListener('click', square._clickHandler);
 });
 
 window.addEventListener('scroll', hideBigCard);
 window.addEventListener('resize', hideBigCard);
 
-// ===== НАВИГАЦИЯ МЕЖДУ ПРОЕКТАМИ =====
+// ===== НАВИГАЦИЯ МЕЖДУ ПРОЕКТАМИ (с учётом источника перехода) =====
+
+// Порядок проектов в категориях (14 проектов)
+const categoryOrder = [1,2,7,3,8,9,6,4,5,10,11,12,13,14];
+// Порядок проектов в "Последних проектах" (4 проекта)
+const featuredOrder = [2,6,8,11];
+
+// Функция для получения следующего/предыдущего ID в заданном порядке
+function getAdjacentId(currentId, order, direction) {
+    const index = order.indexOf(currentId);
+    if (index === -1) return currentId;
+    if (direction === 'next') {
+        return order[(index + 1) % order.length];
+    } else {
+        return order[(index - 1 + order.length) % order.length];
+    }
+}
+
+// Определяем, откуда пришли на страницу проекта
+const returnFrom = localStorage.getItem('returnFrom');
+let navigationOrder = categoryOrder; // по умолчанию порядок категорий
+if (returnFrom === 'featured') {
+    navigationOrder = featuredOrder;
+}
+
+// Для страниц проектов обновляем ссылки prev/next
 const currentPage = window.location.pathname;
 const projectMatch = currentPage.match(/project(\d+)\.html/);
 const currentProjectId = projectMatch ? parseInt(projectMatch[1]) : null;
-
-function getNextProject(currentId, isFeatured = false) {
-    if (isFeatured) {
-        let next = currentId + 1;
-        if (next > 8) next = 1;
-        return next;
-    } else {
-        let next = currentId + 1;
-        if (next > 14) next = 1;
-        return next;
-    }
-}
-
-function getPrevProject(currentId, isFeatured = false) {
-    if (isFeatured) {
-        let prev = currentId - 1;
-        if (prev < 1) prev = 8;
-        return prev;
-    } else {
-        let prev = currentId - 1;
-        if (prev < 1) prev = 14;
-        return prev;
-    }
-}
-
-const isFeaturedProject = currentProjectId && currentProjectId >= 1 && currentProjectId <= 8;
 
 if (currentProjectId) {
     const prevLink = document.querySelector('.project-navigation .prev');
     const nextLink = document.querySelector('.project-navigation .next');
     if (prevLink) {
-        prevLink.href = `project${getPrevProject(currentProjectId, isFeaturedProject)}.html`;
+        const prevId = getAdjacentId(currentProjectId, navigationOrder, 'prev');
+        prevLink.href = `project${prevId}.html`;
     }
     if (nextLink) {
-        nextLink.href = `project${getNextProject(currentProjectId, isFeaturedProject)}.html`;
+        const nextId = getAdjacentId(currentProjectId, navigationOrder, 'next');
+        nextLink.href = `project${nextId}.html`;
     }
 }
 
@@ -579,20 +592,16 @@ if (backArrow) {
 }
 
 // ===== ПЛАВНЫЙ СКРОЛЛ ПО ЯКОРЯМ (без анимации подсветки) =====
-
-// Обработка кликов по ссылке "Контакты" на любой странице
 document.querySelectorAll('a[href="index.html#contact"], a[href="../index.html#contact"], a[href="#contact"]').forEach(link => {
     link.addEventListener('click', function(e) {
         const isIndex = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/');
         if (isIndex) {
-            // На главной странице: только плавный скролл
             e.preventDefault();
             const contactSection = document.getElementById('contact');
             if (contactSection) {
                 contactSection.scrollIntoView({ behavior: 'smooth' });
             }
         } else {
-            // На других страницах: сохраняем флаг и переходим на главную
             e.preventDefault();
             sessionStorage.setItem('scrollToContact', 'true');
             window.location.href = 'index.html';
@@ -600,7 +609,6 @@ document.querySelectorAll('a[href="index.html#contact"], a[href="../index.html#c
     });
 });
 
-// При загрузке главной страницы проверяем флаг и делаем плавный скролл
 if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/')) {
     const shouldScroll = sessionStorage.getItem('scrollToContact');
     if (shouldScroll === 'true') {
@@ -612,8 +620,6 @@ if (window.location.pathname.endsWith('index.html') || window.location.pathname 
             }, 300);
         }
     }
-
-    // Если якорь #contact уже в URL – плавный скролл
     if (window.location.hash === '#contact') {
         const contactSection = document.getElementById('contact');
         if (contactSection) {
@@ -624,7 +630,6 @@ if (window.location.pathname.endsWith('index.html') || window.location.pathname 
     }
 }
 
-// Обработка остальных якорей (не #contact) на той же странице
 document.querySelectorAll('a[href^="#"]:not([href="#contact"]):not([href="index.html#contact"]):not([href="../index.html#contact"])').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
         const targetId = this.getAttribute('href');
@@ -636,6 +641,29 @@ document.querySelectorAll('a[href^="#"]:not([href="#contact"]):not([href="index.
         }
     });
 });
+
+// ===== ПОДСВЕТКА АКТИВНОГО ПУНКТА МЕНЮ ПРИ СКРОЛЛЕ (ГЛАВНАЯ) =====
+function updateActiveMenuItem() {
+    const homeLink = document.querySelector('.menu a[href="index.html"]');
+    const contactsLinkActive = document.querySelector('.menu a[href="index.html#contact"]');
+    if (!homeLink || !contactsLinkActive) return;
+    const contactSection = document.getElementById('contact');
+    if (!contactSection) return;
+    const contactRect = contactSection.getBoundingClientRect();
+    const isContactVisible = contactRect.top <= 150 && contactRect.bottom >= 150;
+    if (isContactVisible) {
+        homeLink.classList.remove('active');
+        contactsLinkActive.classList.add('active');
+    } else {
+        contactsLinkActive.classList.remove('active');
+        homeLink.classList.add('active');
+    }
+}
+
+if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/')) {
+    updateActiveMenuItem();
+    window.addEventListener('scroll', updateActiveMenuItem);
+}
 
 // ===== АНИМИРОВАННЫЙ ФОН ДЛЯ ГЕРОЙ-СЕКЦИИ =====
 const canvas = document.getElementById('hero-canvas');
@@ -710,3 +738,36 @@ if (canvas) {
     createParticles();
     draw();
 }
+
+// ===== ОБНОВЛЁННЫЕ ССЫЛКИ ДЛЯ КАТЕГОРИЙ (14 проектов) =====
+const categoryProjectLinks = {
+    bag: 'projects/project1.html',
+    compass: 'projects/project2.html',
+    car: 'projects/project3.html',
+    lex: 'projects/project4.html',
+    spider: 'projects/project5.html',
+    mirel: 'projects/project6.html',
+    tower: 'projects/project7.html',
+    zombie: 'projects/project8.html',
+    elf: 'projects/project9.html',
+    drag: 'projects/project10.html',
+    sharkula: 'projects/project11.html',
+    'elf-halloween': 'projects/project12.html',
+    firefly: 'projects/project13.html',
+    man: 'projects/project14.html'
+};
+
+const categoryItems = document.querySelectorAll('.category-project-item');
+categoryItems.forEach(item => {
+    const project = item.getAttribute('data-project');
+    item.removeEventListener('click', item._clickHandler);
+    const clickHandler = (e) => {
+        e.stopPropagation();
+        if (categoryProjectLinks[project]) {
+            localStorage.setItem('returnFrom', 'categories');
+            window.location.href = categoryProjectLinks[project];
+        }
+    };
+    item._clickHandler = clickHandler;
+    item.addEventListener('click', clickHandler);
+});
