@@ -2341,3 +2341,79 @@ a, button {
     margin: 0;
     text-align: center;
 }
+/* Мобильная версия страницы "Обо мне" (до 768px) */
+@media (max-width: 768px) {
+    /* Центрируем фото */
+    .about-photo {
+        max-width: 250px;
+        margin: 0 auto;
+    }
+    
+    /* Имя автора – под фото, по центру */
+    .about-right h1 {
+        text-align: center;
+        margin-top: 10px;
+    }
+    
+    /* Биографию и другие блоки можно оставить без изменений,
+       но для лучшей читаемости увеличим отступы */
+    .bio {
+        text-align: left;
+        padding-left: 15px;
+    }
+    
+    /* Блоки навыков и опыта – без дополнительного центрирования */
+    .skills-section h3,
+    .experience-section h3 {
+        text-align: left;
+    }
+}
+
+/* ===== TOAST УВЕДОМЛЕНИЯ (ВСПЛЫВАЮЩИЕ СООБЩЕНИЯ) ===== */
+.toast-message {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 12px 24px;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 500;
+    z-index: 9999;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    border-left: 4px solid;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    pointer-events: none;
+}
+
+.toast-message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast-message.success {
+    border-left-color: cyan;
+    background: rgba(0, 255, 255, 0.1);
+    text-shadow: 0 0 5px cyan;
+}
+
+.toast-message.error {
+    border-left-color: magenta;
+    background: rgba(255, 0, 255, 0.1);
+    text-shadow: 0 0 5px magenta;
+}
+
+@media (max-width: 768px) {
+    .toast-message {
+        bottom: 20px;
+        right: 20px;
+        left: 20px;
+        text-align: center;
+        padding: 10px 16px;
+        font-size: 0.8rem;
+    }
+}

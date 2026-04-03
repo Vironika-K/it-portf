@@ -230,9 +230,10 @@ if (menuEl) {
     menuEl.addEventListener('mouseleave', closeMenu);
 }
 
-// Логика для главной страницы и страницы "Обо мне": открыто при загрузке, закрывается при скролле вниз, открывается при скролле наверх
+/// Логика для главной страницы и страницы "Обо мне": открыто при загрузке, закрывается при скролле вниз, открывается при скролле наверх
+// НО ТОЛЬКО НА УСТРОЙСТВАХ ШИРЕ 768px (не на мобильных)
 const isSpecialPage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/') || window.location.pathname.endsWith('about.html');
-if (isSpecialPage) {
+if (isSpecialPage && window.innerWidth > 768) {
     if (!menuOpenByClick) {
         body.classList.add('menu-open');
     }
@@ -252,6 +253,20 @@ if (isSpecialPage) {
     });
 }
 
+// При изменении размера окна (поворот устройства) проверяем, нужно ли скорректировать состояние меню
+window.addEventListener('resize', function onResize() {
+    if (window.innerWidth <= 768) {
+        // На мобильных устройствах гарантированно закрываем меню, если оно было открыто автоматически
+        if (!menuOpenByClick && body.classList.contains('menu-open')) {
+            body.classList.remove('menu-open');
+        }
+    } else {
+        // На широких экранах, если мы на главной или about и меню не открыто кликом, открываем его
+        if (isSpecialPage && !menuOpenByClick && !body.classList.contains('menu-open')) {
+            body.classList.add('menu-open');
+        }
+    }
+});
 // Скролл к секции категорий при клике на стрелку
 const scrollIndicator = document.getElementById('scrollIndicator');
 const categoriesSection = document.querySelector('.categories-section');
@@ -771,3 +786,131 @@ categoryItems.forEach(item => {
     item._clickHandler = clickHandler;
     item.addEventListener('click', clickHandler);
 });
+
+/// ===== ПОДКЛЮЧЕНИЕ EMAILJS ДЛЯ ФОРМЫ ОБРАТНОЙ СВЯЗИ =====
+
+// Инициализация EmailJS с вашим Public Key
+emailjs.init('1kFBq6X43eQWqwxpZ');
+
+// Функция показа toast-уведомлений в стиле сайта
+function showToast(message, isError = false) {
+    // Удаляем старый тост, если есть
+    const existingToast = document.querySelector('.toast-message');
+    if (existingToast) existingToast.remove();
+
+    const toast = document.createElement('div');
+    toast.className = 'toast-message';
+    toast.classList.add(isError ? 'error' : 'success');
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    // Анимация появления
+    setTimeout(() => toast.classList.add('show'), 10);
+    
+    // Автоматическое скрытие через 3 секунды
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// Валидация имени
+function validateName(name) {
+    if (!name || name.trim().length < 2) {
+        return 'Имя должно содержать минимум 2 символа';
+    }
+    return '';
+}
+
+// Валидация email
+function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+        return 'Введите корректный email (например, name@domain.com)';
+    }
+    return '';
+}
+
+// Получаем форму на главной странице (id="home-feedback-form")
+const homeFeedbackForm = document.getElementById('home-feedback-form');
+
+if (homeFeedbackForm) {
+    homeFeedbackForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Получаем значения полей
+        const nameInput = this.querySelector('input[placeholder="Ваше имя"]');
+        const emailInput = this.querySelector('input[placeholder="Email"]');
+        const messageInput = this.querySelector('textarea[placeholder="Сообщение"]');
+        
+        const name = nameInput ? nameInput.value : '';
+        const email = emailInput ? emailInput.value : '';
+        const message = messageInput ? messageInput.value : '';
+        
+        // Валидация
+        const nameError = validateName(name);
+        if (nameError) {
+            showToast(nameError, true);
+            return;
+        }
+        
+        const emailError = validateEmail(email);
+        if (emailError) {
+            showToast(emailError, true);
+            return;
+        }
+        
+        if (!message.trim()) {
+            showToast('Пожалуйста, напишите сообщение.', true);
+            return;
+        }
+        
+        // Отправляем данные через EmailJS
+        emailjs.send('service_2kugu6m', 'template_jvbt49s', {
+            from_name: name,
+            from_email: email,
+            message: message
+        })
+        .then(function(response) {
+            console.log('Успешно отправлено!', response);
+            showToast('Сообщение отправлено! Я свяжусь с вами в ближайшее время.', false);
+            homeFeedbackForm.reset();
+        })
+        .catch(function(error) {
+            console.error('Ошибка при отправке:', error);
+            showToast('Ошибка отправки. Попробуйте позже или напишите мне напрямую на почту.', true);
+        });
+    });
+}
+
+// ===== ИСПРАВЛЕНИЕ ССЫЛОК СОЦИАЛЬНЫХ СЕТЕЙ =====
+
+// Ссылки на соцсети на главной странице
+const vkLink = document.querySelector('.home-social-link[href="#"]:nth-child(2)'); // обычно VK второй
+const artstationLink = document.querySelector('.home-social-link[href="#"]:first-child'); // ArtStation первый
+
+if (vkLink) {
+    vkLink.href = 'https://vk.com/devi_club7';
+    vkLink.target = '_blank';
+    vkLink.rel = 'noopener noreferrer';
+}
+if (artstationLink) {
+    artstationLink.href = 'https://www.artstation.com/';
+    artstationLink.target = '_blank';
+    artstationLink.rel = 'noopener noreferrer';
+}
+
+// Также исправляем ссылки на странице contact.html (если она существует)
+const contactVk = document.querySelector('.contact .social-link[href="#"]:nth-child(2)');
+const contactArtstation = document.querySelector('.contact .social-link[href="#"]:first-child');
+
+if (contactVk) {
+    contactVk.href = 'https://vk.com/devi_club7';
+    contactVk.target = '_blank';
+    contactVk.rel = 'noopener noreferrer';
+}
+if (contactArtstation) {
+    contactArtstation.href = 'https://www.artstation.com/';
+    contactArtstation.target = '_blank';
+    contactArtstation.rel = 'noopener noreferrer';
+}
