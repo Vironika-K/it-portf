@@ -22,7 +22,7 @@
 
     <main class="about">
         <div class="about-header">
-        <a href="index.html" class="back-arrow" title="Вернуться на главную">←</a>
+        <a href="#" id="back-to-home" class="back-arrow" title="Вернуться на главную">←</a>
         <h2 class="section-title">Обо мне</h2>
     </div>
         <div class="about-container">
@@ -102,5 +102,15 @@
 
     <button id="back-to-top">↑</button>
     <script src="js/main.js"></script>
+
+    <script>
+    document.getElementById('back-to-home').addEventListener('click', function(e) {
+        e.preventDefault();
+        // Определяем базовый путь (корень сайта на GitHub Pages)
+        const basePath = window.location.origin + window.location.pathname.split('/').slice(0, -1).join('/');
+        window.location.href = basePath + '/index.html';
+    });
+</script>
+
 </body>
 </html>
