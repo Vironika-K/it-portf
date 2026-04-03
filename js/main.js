@@ -1,24 +1,13 @@
-// Кнопка "Наверх" – надёжная версия
+// Кнопка "Наверх" – адаптивный порог (20% прокрутки) + резервное создание
 document.addEventListener('DOMContentLoaded', function() {
-    const backToTopButton = document.getElementById('back-to-top');
-    if (backToTopButton) {
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 300) {
-                backToTopButton.classList.add('visible');
-            } else {
-                backToTopButton.classList.remove('visible');
-            }
-        });
-        backToTopButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    } else {
-        // Если кнопка отсутствует (например, из-за ошибки), создаём её заново
-        const newButton = document.createElement('button');
-        newButton.id = 'back-to-top';
-        newButton.innerHTML = '↑';
-        newButton.style.cssText = `
+    let backToTopButton = document.getElementById('back-to-top');
+
+    // Функция создания кнопки, если её нет
+    function createButton() {
+        const btn = document.createElement('button');
+        btn.id = 'back-to-top';
+        btn.innerHTML = '↑';
+        btn.style.cssText = `
             position: fixed;
             bottom: 30px;
             left: 30px;
@@ -37,19 +26,44 @@ document.addEventListener('DOMContentLoaded', function() {
             box-shadow: 0 0 20px cyan;
             z-index: 150;
         `;
-        document.body.appendChild(newButton);
-        // Повторно привязываем события
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 300) {
-                newButton.classList.add('visible');
-            } else {
-                newButton.classList.remove('visible');
-            }
-        });
-        newButton.addEventListener('click', function() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+        document.body.appendChild(btn);
+        return btn;
     }
+
+    if (!backToTopButton) {
+        backToTopButton = createButton();
+    }
+
+    // Функция обновления видимости по проценту прокрутки
+    function updateButtonVisibility() {
+        if (!backToTopButton) return;
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = docHeight > 0 ? scrollTop / docHeight : 0;
+
+        if (scrollPercent > 0.2) { // 20% прокрутки
+            backToTopButton.classList.add('visible');
+            // Для надёжности также меняем inline-стили, если класс не сработал
+            backToTopButton.style.opacity = '1';
+            backToTopButton.style.transform = 'translateY(0)';
+            backToTopButton.style.pointerEvents = 'all';
+        } else {
+            backToTopButton.classList.remove('visible');
+            backToTopButton.style.opacity = '0';
+            backToTopButton.style.transform = 'translateY(20px)';
+            backToTopButton.style.pointerEvents = 'none';
+        }
+    }
+
+    // Обработчики событий
+    window.addEventListener('scroll', updateButtonVisibility);
+    window.addEventListener('resize', updateButtonVisibility);
+    updateButtonVisibility();
+
+    backToTopButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 });
 
 // Данные для маленьких квадратов (14 изображений)
