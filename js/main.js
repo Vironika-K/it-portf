@@ -1,16 +1,55 @@
-// Кнопка "Наверх"
-const backToTopButton = document.getElementById('back-to-top');
-
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 300) {
-        backToTopButton.classList.add('visible');
+// Кнопка "Наверх" – надёжная версия
+document.addEventListener('DOMContentLoaded', function() {
+    const backToTopButton = document.getElementById('back-to-top');
+    if (backToTopButton) {
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        });
+        backToTopButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
     } else {
-        backToTopButton.classList.remove('visible');
+        // Если кнопка отсутствует (например, из-за ошибки), создаём её заново
+        const newButton = document.createElement('button');
+        newButton.id = 'back-to-top';
+        newButton.innerHTML = '↑';
+        newButton.style.cssText = `
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: cyan;
+            color: #0a0a0a;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translateY(20px);
+            pointer-events: none;
+            box-shadow: 0 0 20px cyan;
+            z-index: 150;
+        `;
+        document.body.appendChild(newButton);
+        // Повторно привязываем события
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                newButton.classList.add('visible');
+            } else {
+                newButton.classList.remove('visible');
+            }
+        });
+        newButton.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
     }
-});
-
-backToTopButton.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
 // Данные для маленьких квадратов (14 изображений)
